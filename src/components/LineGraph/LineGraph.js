@@ -3,9 +3,13 @@ import * as d3 from 'd3'
 
 const LineGraph = ({ data, xLabel, yLabel }) => {
   const stageRef = React.useRef()
+  const chartRef = React.useRef({})
 
   React.useEffect(() => {
-    const svg = d3.select(stageRef.current);
+    const chart = chartRef.current;
+    if(!chart.svg){
+      chart.svg = d3.select(stageRef.current)
+    }
     const stage = stageRef.current.getBoundingClientRect()
     const width = stage.width - 40;
     const height = stage.height - 30;
@@ -26,50 +30,82 @@ const LineGraph = ({ data, xLabel, yLabel }) => {
     //
     // var dataset = data.map(d => ({y: d.value}))
 
-    svg
-    .append("g")
-    .attr("transform", "translate(" + 0 + "," + 0 + ")")
+    if(!chart.origin){
+      chart.origin = chart.svg
+      .append("g")
+      .attr("transform", "translate(" + 0 + "," + 0 + ")")
+    }
 
-    svg
-    .append("g")
-    .attr("class", "x axis")
-    .attr("transform", "translate(30," + height + ")")
-    .call(d3.axisBottom(xScale));
+    if(!chart.xAxis){
+      chart.xAxis = chart.svg
+      .append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(30," + height + ")")
+      .call(d3.axisBottom(xScale));
+    }else{
+      chart.xAxis
+      .transition()
+      .call(d3.axisBottom(xScale));
+    }
 
-    svg
-    .append("g")
-    .attr("class", "y axis")
-    .attr("transform", "translate(40,0)")
-    .call(d3.axisLeft(yScale));
+    if(!chart.yAxis){
+      chart.yAxis = chart.svg
+      .append("g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(40,0)")
+      .call(d3.axisLeft(yScale));
+    }else{
+      chart.yAxis
+      .transition()
+      .call(d3.axisLeft(yScale));
+    }
 
-    svg
-    .append("path")
-    .datum(data)
-    .attr("transform", "translate(30, 0)")
-    .attr("stroke-linecap", "round")
-    .attr("class", "line")
-    .attr("d", line);
+    if(!chart.line){
+      chart.line = chart.svg
+      .append("path")
+      .datum(data)
+      .attr("transform", "translate(30, 0)")
+      .attr("stroke-linecap", "round")
+      .attr("class", "line")
+      .attr("d", line);
+    }else{
+      chart.line
+      .datum(data)
+      .transition()
+      .duration(800)
+      .ease(d3.easeCubicInOut)
+      .attr("d", line);
+    }
 
-    svg
-    .append("text")
-    .style("font-size", "13px")
-    .style("font-weight", "800")
-    .style("text-anchor", "middle")
-    .style("text-transform", "uppercase")
-    .attr("transform", `translate(${stage.width / 2}, ${stage.height})`)
-    .text(xLabel)
+    if(!chart.xLabel){
+      chart.xLabel = chart.svg
+      .append("text")
+      .style("font-size", "13px")
+      .style("font-weight", "800")
+      .style("text-anchor", "middle")
+      .style("text-transform", "uppercase")
+      .attr("transform", `translate(${stage.width / 2}, ${stage.height})`)
+      .text(xLabel)
+    }else{
+      chart.xLabel.text(xLabel)
+    }
 
-    svg
-    .append("text")
-    .style("font-size", "13px")
-    .style("font-weight", "800")
-    .style("text-anchor", "middle")
-    .style("text-transform", "uppercase")
-    .attr("transform", `rotate(-90, 10, ${stage.height / 2})`)
-    .attr("x", 10)
-    .attr("y", stage.height / 2)
-    .text(yLabel)
-  }, [])
+    if(!chart.yLabel){
+      chart.yLabel = chart.svg
+      .append("text")
+      .style("font-size", "13px")
+      .style("font-weight", "800")
+      .style("text-anchor", "middle")
+      .style("text-transform", "uppercase")
+      .attr("transform", `rotate(-90, 10, ${stage.height / 2})`)
+      .attr("x", 10)
+      .attr("y", stage.height / 2)
+      .text(yLabel)
+    }else{
+      chart.yLabel.text(yLabel)
+    }
+
+  }, [data])
 
   return (
     <svg width={600} height={450} ref={stageRef}>
