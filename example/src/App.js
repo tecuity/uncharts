@@ -434,16 +434,7 @@ export default class App extends Component {
       <div className="app">
         <ThemeProvider>
           <div className="spacer">
-            <Tile>
-              <LineGraph
-                data={GDPData.map(g => ({
-                  x: parseInt(g.date, 10),
-                  y: parseInt(g.value, 10) / 1000000000000
-                }))}
-                xLabel="Years"
-                yLabel="GDP in Millions"
-              />
-            </Tile>
+            <RandomLineGraph />
           </div>
           <div className="spacer flex-column" style={{width: 420}}>
             <div className="column-spacer">
@@ -520,6 +511,35 @@ export default class App extends Component {
   }
 }
 
+const RandomLineGraph = () => {
+  const getRandomData = () => (
+    GDPData.slice(getRandomInt(0, 10), GDPData.length - getRandomInt(0, 10)).map(g => ({
+      x: parseInt(g.date, 10),
+      y: (parseInt(g.value, 10) / 1000000000000) * getRandom(.75, 1.25)
+    }))
+  )
+  const [data, setData] = React.useState(getRandomData())
+
+  React.useEffect(() => {
+    const interval = window.setInterval(() => {
+      setData(getRandomData())
+    }, 3000)
+    return () => {
+      window.clearInterval(interval)
+    }
+  }, [])
+
+  return (
+    <Tile>
+      <LineGraph
+        data={data}
+        xLabel="Years"
+        yLabel="GDP in Millions"
+      />
+    </Tile>
+  )
+}
+
 const RandomBarGraph = () => {
   const getRandomData = () => (
     GDPData.slice(0, 7).map(g => ({
@@ -530,13 +550,13 @@ const RandomBarGraph = () => {
   const [data, setData] = React.useState(getRandomData())
 
   React.useEffect(() => {
-    const timeout = window.setTimeout(() => {
+    const interval = window.setInterval(() => {
       setData(getRandomData())
-    }, 5000)
+    }, 3000)
     return () => {
-      window.clearTimeout(timeout)
+      window.clearInterval(interval)
     }
-  }, [getRandomData])
+  }, [])
 
   return (
     <Tile>
