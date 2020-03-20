@@ -1,13 +1,13 @@
 import React from 'react'
 import * as d3 from 'd3'
 
-const LineGraph = ({ data }) => {
+const LineGraph = ({ data, xLabel, yLabel }) => {
   const stageRef = React.useRef()
 
   React.useEffect(() => {
     const svg = d3.select(stageRef.current);
     const stage = stageRef.current.getBoundingClientRect()
-    const width = stage.width - 30;
+    const width = stage.width - 40;
     const height = stage.height - 30;
 
     const xScale = d3.scaleLinear()
@@ -15,11 +15,11 @@ const LineGraph = ({ data }) => {
     .range([10, width]);
 
 
-    var yScale = d3.scaleLinear()
+    const yScale = d3.scaleLinear()
     .domain(d3.extent(data, d => d.y))
     .range([height, 10]);
 
-    var line = d3.line()
+    const line = d3.line()
     .x(d => xScale(d.x))
     .y(d => yScale(d.y))
     .curve(d3.curveMonotoneX)
@@ -33,22 +33,42 @@ const LineGraph = ({ data }) => {
     svg
     .append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(20," + height + ")")
+    .attr("transform", "translate(30," + height + ")")
     .call(d3.axisBottom(xScale));
 
     svg
     .append("g")
     .attr("class", "y axis")
-    .attr("transform", "translate(30,0)")
+    .attr("transform", "translate(40,0)")
     .call(d3.axisLeft(yScale));
 
     svg
     .append("path")
     .datum(data)
-    .attr("transform", "translate(20, 0)")
+    .attr("transform", "translate(30, 0)")
     .attr("stroke-linecap", "round")
     .attr("class", "line")
     .attr("d", line);
+
+    svg
+    .append("text")
+    .style("font-size", "13px")
+    .style("font-weight", "800")
+    .style("text-anchor", "middle")
+    .style("text-transform", "uppercase")
+    .attr("transform", `translate(${stage.width / 2}, ${stage.height})`)
+    .text(xLabel)
+
+    svg
+    .append("text")
+    .style("font-size", "13px")
+    .style("font-weight", "800")
+    .style("text-anchor", "middle")
+    .style("text-transform", "uppercase")
+    .attr("transform", `rotate(-90, 10, ${stage.height / 2})`)
+    .attr("x", 10)
+    .attr("y", stage.height / 2)
+    .text(yLabel)
   }, [])
 
   return (

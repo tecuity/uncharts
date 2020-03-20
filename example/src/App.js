@@ -1,6 +1,16 @@
 import React, { Component } from "react";
 import "normalize.css";
-import { LineGraph, NumberTile, Tile, ThemeProvider } from "react-dashboard";
+import { LineGraph, NumberTile, BarGraph, Tile, ThemeProvider } from "react-dashboard";
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+const getRandom = (min, max) => {
+  return Math.random() * (max - min) + min;
+}
 
 const GDPData = [
   {
@@ -430,6 +440,8 @@ export default class App extends Component {
                   x: parseInt(g.date, 10),
                   y: parseInt(g.value, 10) / 1000000000000
                 }))}
+                xLabel="Years"
+                yLabel="GDP in Millions"
               />
             </Tile>
           </div>
@@ -499,8 +511,40 @@ export default class App extends Component {
               />
             </div>
           </div>
+          <div className="spacer">
+            <RandomBarGraph />
+          </div>
         </ThemeProvider>
       </div>
     );
   }
+}
+
+const RandomBarGraph = () => {
+  const getRandomData = () => (
+    GDPData.slice(0, 7).map(g => ({
+      x: parseInt(g.date, 10),
+      y: (parseInt(g.value, 10) / 1000000000000) * getRandom(.95, 1.05)
+    }))
+  )
+  const [data, setData] = React.useState(getRandomData())
+
+  React.useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      setData(getRandomData())
+    }, 5000)
+    return () => {
+      window.clearTimeout(timeout)
+    }
+  }, [getRandomData])
+
+  return (
+    <Tile>
+      <BarGraph
+        data={data}
+        yLabel="GDP in Millions"
+        xLabel="Years"
+      />
+    </Tile>
+  )
 }
