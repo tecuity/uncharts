@@ -132,7 +132,6 @@ export default ({ data, xLabel, yLabel }) => {
         chart.bars.remove()
         createBars()
       }else{
-        console.log(yExtent);
         chart.bars
         .data(data.map(d => d.y))
         .transition()
