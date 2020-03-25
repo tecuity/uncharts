@@ -51,7 +51,7 @@ export default ({ data, width = 600, height = 450 }) => {
     if (!chart.hoverPercent) {
       chart.hoverPercent = chart.svg
         .append("text")
-        .style("font-size", "48px")
+        .style("font-size", `${12 + (width / 15)}px`)
         .style("font-weight", "800")
         .style("text-transform", "uppercase")
         .style("opacity", 0)
@@ -59,36 +59,40 @@ export default ({ data, width = 600, height = 450 }) => {
         .attr("fill", theme.colors.gray)
         .attr(
           "transform",
-          `translate(${width / 2 + margin * 2}, ${height / 2 + 5})`
+          `translate(${width / 2 + margin * 2}, ${(height / 2) + (height / 50)})`
         )
         .attr("text-anchor", "middle")
         .text("50%");
     } else {
-      chart.hoverPercent.attr(
+      chart.hoverPercent
+      .style("font-size", `${12 + (width / 15)}px`)
+      .attr(
         "transform",
-        `translate(${width / 2 + margin * 2}, ${height / 2 + 5})`
+        `translate(${width / 2 + margin * 2}, ${(height / 2) + (height / 50)})`
       );
     }
 
     if (!chart.hoverLabel) {
       chart.hoverLabel = chart.svg
         .append("text")
-        .style("font-size", "18px")
+        .style("font-size", `${9 + (width /50)}px`)
         .style("font-weight", "800")
         .style("text-transform", "uppercase")
-        .style("opacity", 0)
+        // .style("opacity", 0)
         .style("transition", "opacity 300ms")
         .attr("text-anchor", "middle")
         .attr("fill", theme.colors.gray)
         .attr(
           "transform",
-          `translate(${width / 2 + margin * 2}, ${height / 2 + 35})`
+          `translate(${width / 2 + margin * 2}, ${(height / 2) + (height / 12)})`
         )
         .text("Label");
     } else {
-      chart.hoverLabel.attr(
+      chart.hoverLabel
+      .style("font-size", `${9 + (width /50)}px`)
+      .attr(
         "transform",
-        `translate(${width / 2 + margin * 2}, ${height / 2 + 35})`
+        `translate(${width / 2 + margin * 2}, ${(height / 2) + (height / 12)})`
       );
     }
 
@@ -158,6 +162,7 @@ export default ({ data, width = 600, height = 450 }) => {
         .duration(2000)
         .ease(d3.easeElastic.period(0.4))
         .style("font-size", `${9 + Math.floor(1 * (width / 60))}px`)
+        .attr("y", width / 100)
         .attr("transform", d => `translate(${arc.centroid(d)})`)
         .text((d, i) => `${Math.round((data[i].value / total) * 100)}%`);
     }
