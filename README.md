@@ -1,12 +1,8 @@
-# uncharts
+# uncharts [![NPM](https://img.shields.io/npm/v/uncharts.svg)](https://www.npmjs.com/package/uncharts) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Demo page
 
 [See uncharts in action here.](https://tecuity.github.io/uncharts/)
-
-> Dashboard components for React apps
-
-[![NPM](https://img.shields.io/npm/v/uncharts.svg)](https://www.npmjs.com/package/uncharts) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
