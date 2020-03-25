@@ -3,7 +3,7 @@ import React from 'react'
 import * as d3 from 'd3'
 import usePrevious from '../../hooks/usePrevious'
 
-export default ({ data, xLabel, yLabel }) => {
+export default ({ data, xLabel, yLabel, width, height }) => {
   const stageRef = React.useRef()
   // const theme = React.useContext(ThemeContext);
   const chartRef = React.useRef({})
@@ -36,39 +36,44 @@ export default ({ data, xLabel, yLabel }) => {
     if(!chart.svg){
       chart.svg = d3.select(stageRef.current)
     }
-    const stage = stageRef.current.getBoundingClientRect()
+    // const stage = stageRef.current.getBoundingClientRect()
     const margin = 15;
-    const width = stage.width - (margin * 2);
-    const height = stage.height - (margin * 2);
-    const barOffset = 10
+    const calculatedWidth = width - (margin * 2);
+    const calculatedHeight = height - (margin * 2);
+    const barOffset = 15
     const barWidth = (width / data.length) - barOffset;
     const yExtent = getYExtent(data)
 
     if(!chart.xScale){
       chart.xScale = d3.scaleBand()
-      .rangeRound([margin * 2, width])
+      .rangeRound([margin * 2, calculatedWidth])
       .domain(data.map(d => d.x).reverse())
     }else{
-      chart.xScale.domain(data.map(d => d.x).reverse())
+      chart.xScale
+      .rangeRound([margin * 2, calculatedWidth])
+      .domain(data.map(d => d.x).reverse())
     }
 
     if(!chart.yScale){
       chart.yScale = d3.scaleLinear()
       .domain(yExtent)
-      .range([height, margin]);
+      .range([calculatedHeight, margin]);
     }else{
-      chart.yScale.domain(yExtent)
+      chart.yScale
+      .domain(yExtent)
+      .range([calculatedHeight, margin])
     }
 
     if(!chart.xAxis){
       chart.xAxis = chart.svg
       .append("g")
       .attr("class", "x axis")
-      .attr("transform", `translate(${margin},${height})`)
+      .attr("transform", `translate(${margin},${calculatedHeight})`)
       .call(d3.axisBottom(chart.xScale));
     }else{
       chart.xAxis
       .transition()
+      .attr("transform", `translate(${margin},${calculatedHeight})`)
       .call(d3.axisBottom(chart.xScale));
     }
 
@@ -91,10 +96,12 @@ export default ({ data, xLabel, yLabel }) => {
       .style("font-weight", "800")
       .style("text-anchor", "middle")
       .style("text-transform", "uppercase")
-      .attr("transform", `translate(${stage.width / 2}, ${stage.height})`)
+      .attr("transform", `translate(${width / 2}, ${height})`)
       .text(xLabel)
     }else{
-      chart.xLabel.text(xLabel)
+      chart.xLabel
+      .attr("transform", `translate(${width / 2}, ${height})`)
+      .text(xLabel)
     }
 
     if(!chart.yLabel){
@@ -104,12 +111,15 @@ export default ({ data, xLabel, yLabel }) => {
       .style("font-weight", "800")
       .style("text-anchor", "middle")
       .style("text-transform", "uppercase")
-      .attr("transform", `rotate(-90, 10, ${stage.height / 2})`)
+      .attr("transform", `rotate(-90, 10, ${height / 2})`)
       .attr("x", 10)
-      .attr("y", stage.height / 2)
+      .attr("y", height / 2)
       .text(yLabel)
     }else{
-      chart.yLabel.text(yLabel)
+      chart.yLabel
+      .attr("transform", `rotate(-90, 10, ${height / 2})`)
+      .attr("y", height / 2)
+      .text(yLabel)
     }
 
     const createBars = () => {
@@ -121,7 +131,7 @@ export default ({ data, xLabel, yLabel }) => {
         .attr('width', barWidth)
         .attr('height', d => chart.yScale(d) + margin)
         .attr('x', (d, i) => margin + 5 + chart.xScale(data[data.length - 1 - i].x))
-        .attr('y', d => height - chart.yScale(d) - margin)
+        .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
         .attr('rx', 5)
     }
 
@@ -141,7 +151,7 @@ export default ({ data, xLabel, yLabel }) => {
           .attr('width', barWidth)
           .attr('height', d => chart.yScale(d) + margin)
           .attr('x', (d, i) => margin + 5 + chart.xScale(data[data.length - 1 - i].x))
-          .attr('y', d => height - chart.yScale(d) - margin)
+          .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
       }
     }
 
@@ -152,10 +162,10 @@ export default ({ data, xLabel, yLabel }) => {
     //   .duration(2000)
     //   .ease(d3.easeElastic);
     isInitialized.current = true;
-  }, [data])
+  }, [data, width, height, xLabel, yLabel, prevDataLength])
 
   return (
-    <svg width={600} height={450} ref={stageRef}>
+    <svg width={width} height={height} ref={stageRef}>
 
     </svg>
   )

@@ -1,6 +1,8 @@
 export { ThemeProvider } from './components/ThemeProvider/ThemeProvider'
+export { ResponsiveProvider } from './components/ResponsiveProvider/ResponsiveProvider'
 export Tile from './components/Tile/Tile'
 export NumberTile from './components/NumberTile/NumberTile'
 export LineGraph from './components/LineGraph/LineGraph'
 export BarGraph from './components/BarGraph/BarGraph'
 export PieChart from './components/PieChart/PieChart'
+export useResponsive from './hooks/useResponsive'

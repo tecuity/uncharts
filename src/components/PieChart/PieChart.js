@@ -1,8 +1,8 @@
 import React from "react";
-import { ThemeContext } from '../ThemeProvider/ThemeProvider'
+import { ThemeContext } from "../ThemeProvider/ThemeProvider";
 import * as d3 from "d3";
 
-export default ({ data }) => {
+export default ({ data, width = 600, height = 450 }) => {
   const stageRef = React.useRef();
   const theme = React.useContext(ThemeContext);
   const chartRef = React.useRef({});
@@ -11,9 +11,10 @@ export default ({ data }) => {
   React.useEffect(() => {
     const stage = stageRef.current.getBoundingClientRect();
     const margin = 15;
-    const width = stage.width - margin * 2;
-    const height = stage.height - margin * 2;
-    const orient = width < height ? width : height;
+    const calculatedWidth = width - margin * 2;
+    const calculatedHeight = height - margin * 2;
+    const orient =
+      calculatedWidth < calculatedHeight ? calculatedWidth : calculatedHeight;
     const radius = orient / 2 - margin;
     const chart = chartRef.current;
     if (!chart.svg) {
@@ -26,10 +27,12 @@ export default ({ data }) => {
     if (!chart.pieGroup) {
       chart.pieGroup = chart.svg
         .append("g")
-        .attr(
-          "transform",
-          `translate(${stage.width / 2}, ${stage.height / 2})`
-        );
+        .attr("transform", `translate(${width / 2}, ${height / 2})`);
+    } else {
+      chart.pieGroup.attr(
+        "transform",
+        `translate(${width / 2 + margin * 2}, ${height / 2})`
+      );
     }
 
     const arc = d3
@@ -45,7 +48,7 @@ export default ({ data }) => {
       return t => arc(i(t));
     }
 
-    if(!chart.hoverPercent){
+    if (!chart.hoverPercent) {
       chart.hoverPercent = chart.svg
         .append("text")
         .style("font-size", "48px")
@@ -54,12 +57,20 @@ export default ({ data }) => {
         .style("opacity", 0)
         .style("transition", "opacity 300ms")
         .attr("fill", theme.colors.gray)
-        .attr("transform", `translate(${stage.width / 2}, ${(stage.height / 2) +5})`)
+        .attr(
+          "transform",
+          `translate(${width / 2 + margin * 2}, ${height / 2 + 5})`
+        )
         .attr("text-anchor", "middle")
-        .text("50%")
+        .text("50%");
+    } else {
+      chart.hoverPercent.attr(
+        "transform",
+        `translate(${width / 2 + margin * 2}, ${height / 2 + 5})`
+      );
     }
 
-    if(!chart.hoverLabel){
+    if (!chart.hoverLabel) {
       chart.hoverLabel = chart.svg
         .append("text")
         .style("font-size", "18px")
@@ -69,8 +80,16 @@ export default ({ data }) => {
         .style("transition", "opacity 300ms")
         .attr("text-anchor", "middle")
         .attr("fill", theme.colors.gray)
-        .attr("transform", `translate(${stage.width / 2}, ${(stage.height / 2) + 35})`)
-        .text("Label")
+        .attr(
+          "transform",
+          `translate(${width / 2 + margin * 2}, ${height / 2 + 35})`
+        )
+        .text("Label");
+    } else {
+      chart.hoverLabel.attr(
+        "transform",
+        `translate(${width / 2 + margin * 2}, ${height / 2 + 35})`
+      );
     }
 
     chart.pie = d3
@@ -84,7 +103,7 @@ export default ({ data }) => {
         .data(chart.pie)
         .enter()
         .append("g")
-        .attr("class", "slice")
+        .attr("class", "slice");
     } else {
       chart.arcs.data(chart.pie);
     }
@@ -93,35 +112,29 @@ export default ({ data }) => {
       chart.slices = chart.arcs
         .append("path")
         .attr("fill", (d, i) => d3.interpolateCool(0.9 * (i / data.length)))
-        .attr("d", arc)
+        .attr("d", arc);
 
       chart.slices
         .transition()
         .duration(2000)
-        .ease(d3.easeElastic.period(.4))
-        .attrTween("d", arcTween)
+        .ease(d3.easeElastic.period(0.4))
+        .attrTween("d", arcTween);
 
       chart.slices.on("mouseover", d => {
-        chart.hoverPercent
-        .text(d.data.value)
-        .style("opacity", 1)
-        chart.hoverLabel
-        .text(d.data.label)
-        .style("opacity", 1)
-      })
+        chart.hoverPercent.text(d.data.value).style("opacity", 1);
+        chart.hoverLabel.text(d.data.label).style("opacity", 1);
+      });
 
       chart.slices.on("mouseout", d => {
-        chart.hoverPercent
-        .style("opacity", 0)
-        chart.hoverLabel
-        .style("opacity", 0)
-      })
+        chart.hoverPercent.style("opacity", 0);
+        chart.hoverLabel.style("opacity", 0);
+      });
     } else {
       chart.slices
         .data(chart.pie)
         .transition()
         .duration(2000)
-        .ease(d3.easeElastic.period(.4))
+        .ease(d3.easeElastic.period(0.4))
         .attrTween("d", arcTween);
     }
 
@@ -130,18 +143,21 @@ export default ({ data }) => {
         .append("text")
         .attr("transform", d => `translate(${arc.centroid(d)})`)
         .attr("text-anchor", "middle")
-        .style("font-size", "18px")
+        .style("font-size", `${9 + Math.floor(1 * (width / 100))}px`)
         .style("font-weight", "800")
         .style("text-transform", "uppercase")
         .style("pointer-events", "none")
         .attr("fill", "#ffffff")
+        .attr("x", 0)
+        .attr("y", width / 100)
         .text((d, i) => `${Math.round((data[i].value / total) * 100)}%`);
     } else {
       chart.sliceLabels
         .data(chart.pie)
         .transition()
         .duration(2000)
-        .ease(d3.easeElastic.period(.4))
+        .ease(d3.easeElastic.period(0.4))
+        .style("font-size", `${9 + Math.floor(1 * (width / 60))}px`)
         .attr("transform", d => `translate(${arc.centroid(d)})`)
         .text((d, i) => `${Math.round((data[i].value / total) * 100)}%`);
     }
@@ -183,7 +199,7 @@ export default ({ data }) => {
         .attr("x", legendSquareWidth + 10)
         .attr("y", legendSquareWidth - legendSquareWidth / 4);
     }
-  }, [data]);
+  }, [data, width, height, theme.colors.gray]);
 
-  return <svg width={600} height={450} ref={stageRef}></svg>;
+  return <svg width={width} height={height} ref={stageRef}></svg>;
 };

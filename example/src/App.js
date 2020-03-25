@@ -6,7 +6,9 @@ import {
   BarGraph,
   PieChart,
   Tile,
-  ThemeProvider
+  ThemeProvider,
+  ResponsiveProvider,
+  useResponsive
 } from "react-dashboard";
 import GDPData from "./data";
 
@@ -20,87 +22,97 @@ const getRandom = (min, max) => {
   return Math.random() * (max - min) + min;
 };
 
+const aspectRatio = 400 / 600;
+
+const getHeightByWidth = width => width * aspectRatio;
+
 export default class App extends Component {
   render() {
     return (
       <div className="app">
-        <ThemeProvider>
-          <div className="spacer">
-            <RandomLineGraph />
-          </div>
-          <div className="spacer flex-column" style={{ width: 420 }}>
-            <div className="column-spacer">
-              <NumberTile
-                label="Businesses"
-                intervals={[
-                  {
-                    label: "Day",
-                    value: 2
-                  },
-                  {
-                    label: "Week",
-                    value: 24
-                  },
-                  {
-                    label: "Month",
-                    value: 6289
-                  },
-                  {
-                    label: "Year",
-                    value: 22941
-                  }
-                ]}
-              />
+        <ResponsiveProvider>
+          <ThemeProvider>
+            <div className="flex-row">
+              <div className="spacer flex-column col-6">
+                <RandomLineGraph />
+              </div>
+              <div className="spacer flex-column col-6" style={{ width: 420 }}>
+                <div className="column-spacer">
+                  <NumberTile
+                    label="Businesses"
+                    intervals={[
+                      {
+                        label: "Day",
+                        value: 2
+                      },
+                      {
+                        label: "Week",
+                        value: 24
+                      },
+                      {
+                        label: "Month",
+                        value: 6289
+                      },
+                      {
+                        label: "Year",
+                        value: 22941
+                      }
+                    ]}
+                  />
+                </div>
+                <div className="column-spacer">
+                  <NumberTile
+                    label="Payments"
+                    color="green"
+                    prefix="$"
+                    intervals={[
+                      {
+                        label: "Hour",
+                        value: 42
+                      },
+                      {
+                        label: "Day",
+                        value: 773
+                      },
+                      {
+                        label: "Week",
+                        value: 6289
+                      }
+                    ]}
+                  />
+                </div>
+                <div>
+                  <NumberTile
+                    label="Active Users"
+                    color="gray"
+                    intervals={[
+                      {
+                        label: "Hour",
+                        value: 13
+                      },
+                      {
+                        label: "Day",
+                        value: 29
+                      },
+                      {
+                        label: "Week",
+                        value: 328
+                      }
+                    ]}
+                  />
+                </div>
+              </div>
             </div>
-            <div className="column-spacer">
-              <NumberTile
-                label="Payments"
-                color="green"
-                prefix="$"
-                intervals={[
-                  {
-                    label: "Hour",
-                    value: 42
-                  },
-                  {
-                    label: "Day",
-                    value: 773
-                  },
-                  {
-                    label: "Week",
-                    value: 6289
-                  }
-                ]}
-              />
+            <div className="flex-row">
+              <div className="spacer flex-colum col-6">
+                <RandomBarGraph />
+              </div>
+              <div className="spacer flex-colum col-6">
+                <RandomPieChart />
+              </div>
             </div>
-            <div>
-              <NumberTile
-                label="Active Users"
-                color="gray"
-                intervals={[
-                  {
-                    label: "Hour",
-                    value: 13
-                  },
-                  {
-                    label: "Day",
-                    value: 29
-                  },
-                  {
-                    label: "Week",
-                    value: 328
-                  }
-                ]}
-              />
-            </div>
-          </div>
-          <div className="spacer">
-            <RandomBarGraph />
-          </div>
-          <div className="spacer">
-            <RandomPieChart />
-          </div>
-        </ThemeProvider>
+          </ThemeProvider>
+        </ResponsiveProvider>
       </div>
     );
   }
@@ -129,6 +141,10 @@ const RandomPieChart = () => {
   const getRandomData = () =>
     foodData.map(d => ({ ...d, value: d.value + getRandomInt(0, 30) }));
   const [data, setData] = React.useState(getRandomData());
+  const [width, setWidth] = React.useState(600);
+  const [height, setHeight] = React.useState(450);
+  const { page } = useResponsive();
+  const tile = React.useRef();
 
   React.useEffect(() => {
     const interval = window.setInterval(() => {
@@ -139,9 +155,17 @@ const RandomPieChart = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    const tileWidth = tile.current.getBoundingClientRect().width;
+    const newWidth = tileWidth - 40
+    const newHeight = getHeightByWidth(tileWidth);
+    setWidth(newWidth);
+    setHeight(newHeight);
+  }, [page.width, tile]);
+
   return (
-    <Tile>
-      <PieChart data={data} />
+    <Tile ref={tile}>
+      <PieChart data={data} width={width} height={height} />
     </Tile>
   );
 };
@@ -156,6 +180,10 @@ const RandomLineGraph = () => {
       y: (parseInt(g.value, 10) / 1000000000000) * getRandom(0.75, 1.25)
     }));
   const [data, setData] = React.useState(getRandomData());
+  const [width, setWidth] = React.useState(600);
+  const [height, setHeight] = React.useState(450);
+  const { page } = useResponsive();
+  const tile = React.useRef();
 
   React.useEffect(() => {
     const interval = window.setInterval(() => {
@@ -166,9 +194,23 @@ const RandomLineGraph = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    const tileWidth = tile.current.getBoundingClientRect().width;
+    const newWidth = tileWidth - 40
+    const newHeight = getHeightByWidth(tileWidth);
+    setWidth(newWidth);
+    setHeight(newHeight);
+  }, [page.width, tile]);
+
   return (
-    <Tile>
-      <LineGraph data={data} xLabel="Years" yLabel="GDP in Millions" />
+    <Tile ref={tile}>
+      <LineGraph
+        data={data}
+        xLabel="Years"
+        yLabel="GDP in Millions"
+        width={width}
+        height={height}
+      />
     </Tile>
   );
 };
@@ -180,6 +222,10 @@ const RandomBarGraph = () => {
       y: (parseInt(g.value, 10) / 1000000000000) * getRandom(0.95, 1.05)
     }));
   const [data, setData] = React.useState(getRandomData());
+  const [width, setWidth] = React.useState(600);
+  const [height, setHeight] = React.useState(450);
+  const { page } = useResponsive();
+  const tile = React.useRef();
 
   React.useEffect(() => {
     const interval = window.setInterval(() => {
@@ -190,9 +236,17 @@ const RandomBarGraph = () => {
     };
   }, []);
 
+  React.useEffect(() => {
+    const tileWidth = tile.current.getBoundingClientRect().width;
+    const newWidth = tileWidth - 40
+    const newHeight = getHeightByWidth(tileWidth);
+    setWidth(newWidth);
+    setHeight(newHeight);
+  }, [page.width, tile]);
+
   return (
-    <Tile>
-      <BarGraph data={data} yLabel="GDP in Millions" xLabel="Years" />
+    <Tile ref={tile}>
+      <BarGraph data={data} yLabel="GDP in Millions" xLabel="Years" width={width} height={height} />
     </Tile>
   );
 };
