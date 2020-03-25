@@ -1,13 +1,13 @@
 {
-  "name": "react-dashboard-example",
-  "homepage": "https://chrisjpatty.github.io/react-dashboard",
+  "name": "uncharts-example",
+  "homepage": "https://tecuity.github.io/uncharts",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
   "dependencies": {
     "normalize.css": "^8.0.1",
     "prop-types": "^15.6.2",
-    "react-dashboard": "file:..",
+    "uncharts": "file:..",
     "react-scripts": "^1.1.4"
   },
   "scripts": {

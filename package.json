@@ -1,10 +1,10 @@
 {
-  "name": "react-dashboard",
-  "version": "1.0.0",
-  "description": "Dashboard components for React apps",
+  "name": "uncharts",
+  "version": "0.0.1",
+  "description": "Opinionated data charts for React, powered by D3",
   "author": "chrisjpatty",
-  "license": "All Rights Reserved",
-  "repository": "",
+  "license": "MIT",
+  "repository": "github:tecuity/uncharts",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "jsnext:main": "dist/index.es.js",
@@ -50,6 +50,7 @@
     "eslint-plugin-react-hooks": "^2.5.0",
     "eslint-plugin-standard": "^3.1.0",
     "gh-pages": "^1.2.0",
+    "postcss-nested": "^4.2.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-scripts": "^1.1.4",
@@ -67,7 +68,6 @@
   "dependencies": {
     "d3": "^5.15.0",
     "nanoid": "^2.1.11",
-    "postcss-nested": "^4.2.1",
     "react-prop-transition": "^1.0.3"
   }
 }
