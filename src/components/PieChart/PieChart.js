@@ -78,7 +78,7 @@ export default ({ data, width = 600, height = 450 }) => {
         .style("font-size", `${9 + (width /50)}px`)
         .style("font-weight", "800")
         .style("text-transform", "uppercase")
-        // .style("opacity", 0)
+        .style("opacity", 0)
         .style("transition", "opacity 300ms")
         .attr("text-anchor", "middle")
         .attr("fill", theme.colors.gray)

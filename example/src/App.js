@@ -11,6 +11,7 @@ import {
   useResponsive
 } from "react-dashboard";
 import GDPData from "./data";
+import { requestInterval, clearRequestInterval } from './animationTimeout'
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -147,11 +148,11 @@ const RandomPieChart = () => {
   const tile = React.useRef();
 
   React.useEffect(() => {
-    const interval = window.setInterval(() => {
+    const interval = requestInterval(() => {
       setData(getRandomData());
     }, 3000);
     return () => {
-      window.clearInterval(interval);
+      clearRequestInterval(interval);
     };
   }, []);
 
@@ -186,11 +187,11 @@ const RandomLineGraph = () => {
   const tile = React.useRef();
 
   React.useEffect(() => {
-    const interval = window.setInterval(() => {
+    const interval = requestInterval(() => {
       setData(getRandomData());
     }, 3000);
     return () => {
-      window.clearInterval(interval);
+      clearRequestInterval(interval);
     };
   }, []);
 
@@ -228,11 +229,11 @@ const RandomBarGraph = () => {
   const tile = React.useRef();
 
   React.useEffect(() => {
-    const interval = window.setInterval(() => {
+    const interval = requestInterval(() => {
       setData(getRandomData());
     }, 3000);
     return () => {
-      window.clearInterval(interval);
+      clearRequestInterval(interval);
     };
   }, []);
 
