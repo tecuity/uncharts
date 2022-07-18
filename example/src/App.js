@@ -37,15 +37,11 @@ export default class App extends Component {
               <div className="spacer flex-column col-6">
                 <RandomLineGraph />
               </div>
-              <div className="spacer flex-column col-6" style={{ width: 420 }}>
+              <div className="spacer flex-column col-6" style={{ width: 500 }}>
                 <div className="column-spacer">
                   <NumberTile
-                    label="Businesses"
+                    label="UCC Info Request"
                     intervals={[
-                      {
-                        label: "Day",
-                        value: 2
-                      },
                       {
                         label: "Week",
                         value: 24
