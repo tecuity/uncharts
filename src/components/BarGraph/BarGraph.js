@@ -47,11 +47,11 @@ export default ({ data, xLabel, yLabel, width, height }) => {
     if(!chart.xScale){
       chart.xScale = d3.scaleBand()
       .rangeRound([margin * 2, calculatedWidth])
-      .domain(data.map(d => d.x).reverse())
+      .domain(data.map(d => d.x))
     }else{
       chart.xScale
       .rangeRound([margin * 2, calculatedWidth])
-      .domain(data.map(d => d.x).reverse())
+      .domain(data.map(d => d.x))
     }
 
     if(!chart.yScale){
