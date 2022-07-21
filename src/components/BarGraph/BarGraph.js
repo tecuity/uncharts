@@ -3,7 +3,7 @@ import React from 'react'
 import * as d3 from 'd3'
 import usePrevious from '../../hooks/usePrevious'
 
-export default ({ data, xLabel, yLabel, width, height }) => {
+export default ({ data, xLabel, yLabel, width, height, yFromZero }) => {
   const stageRef = React.useRef()
   // const theme = React.useContext(ThemeContext);
   const chartRef = React.useRef({})
@@ -43,6 +43,10 @@ export default ({ data, xLabel, yLabel, width, height }) => {
     const barOffset = 15
     const barWidth = (width / data.length) - barOffset;
     const yExtent = getYExtent(data)
+    
+    if (yFromZero) {
+      yExtent[0] = "0";
+    }
 
     if(!chart.xScale){
       chart.xScale = d3.scaleBand()
@@ -131,7 +135,14 @@ export default ({ data, xLabel, yLabel, width, height }) => {
         .attr('width', barWidth)
         .attr('height', d => chart.yScale(d) + margin)
         .attr('x', (d, i) => margin + 5 + chart.xScale(data[data.length - 1 - i].x))
-        .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
+        .attr('y', d => {
+          console.log("calculatedHeight", calculatedHeight);
+          console.log("chart.yScale(d)", chart.yScale(d));
+          console.log("margin", margin);
+          const returnVal = calculatedHeight - chart.yScale(d) - margin;
+          console.log("returnVal", returnVal);
+          return calculatedHeight - chart.yScale(d) - margin
+        })
         .attr('rx', 5)
     }
 
@@ -162,7 +173,7 @@ export default ({ data, xLabel, yLabel, width, height }) => {
     //   .duration(2000)
     //   .ease(d3.easeElastic);
     isInitialized.current = true;
-  }, [data, width, height, xLabel, yLabel, prevDataLength])
+  }, [data, width, height, xLabel, yLabel, prevDataLength, yFromZero])
 
   return (
     <svg width={width} height={height} ref={stageRef}>
