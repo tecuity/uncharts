@@ -133,16 +133,9 @@ export default ({ data, xLabel, yLabel, width, height, yFromZero }) => {
         .append('rect')
         .attr('fill', (d, i) => d3.interpolateCool(.8 * (i / data.length)))
         .attr('width', barWidth)
-        .attr('height', d => chart.yScale(d) + margin)
+        .attr('height', d => calculatedHeight - chart.yScale(d))
         .attr('x', (d, i) => margin + 5 + chart.xScale(data[data.length - 1 - i].x))
-        .attr('y', d => {
-          console.log("calculatedHeight", calculatedHeight);
-          console.log("chart.yScale(d)", chart.yScale(d));
-          console.log("margin", margin);
-          const returnVal = calculatedHeight - chart.yScale(d) - margin;
-          console.log("returnVal", returnVal);
-          return calculatedHeight - chart.yScale(d) - margin
-        })
+        .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
         .attr('rx', 5)
     }
 
@@ -160,9 +153,11 @@ export default ({ data, xLabel, yLabel, width, height, yFromZero }) => {
         .ease(d3.easeElastic.period(.4))
         .delay((d, i) => i * 50)
           .attr('width', barWidth)
-          .attr('height', d => chart.yScale(d) + margin)
-          .attr('x', (d, i) => margin + 5 + chart.xScale(data[data.length - 1 - i].x))
-          .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
+          .attr('height', d => calculatedHeight - chart.yScale(d))
+          .attr('x', (d, i) => margin + 5 + chart.xScale(data[i].x))
+          // .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
+          .attr('y', d => chart.yScale(d))
+
       }
     }
 

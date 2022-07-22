@@ -221,19 +221,19 @@ const RandomBarGraph = () => {
   const [data, setData] = React.useState(getRandomData());
   const [width, setWidth] = React.useState(600);
   const [height, setHeight] = React.useState(450);
+  const [fromZero, setFromZero] = React.useState(false);
   const { page } = useResponsive();
   const tile = React.useRef();
 
-  console.log("data", data);
-
-  // React.useEffect(() => {
-  //   const interval = requestInterval(() => {
-  //     setData(getRandomData());
-  //   }, 3000);
-  //   return () => {
-  //     clearRequestInterval(interval);
-  //   };
-  // }, []);
+  React.useEffect(() => {
+    const interval = requestInterval(() => {
+      setData(getRandomData());
+      setFromZero((prev) => !prev);
+    }, 3000);
+    return () => {
+      clearRequestInterval(interval);
+    };
+  }, []);
 
   React.useEffect(() => {
     const tileWidth = tile.current.getBoundingClientRect().width;
@@ -251,7 +251,7 @@ const RandomBarGraph = () => {
         xLabel="Years"
         width={width}
         height={height}
-        yFromZero
+        yFromZero={fromZero}
       />
     </Tile>
   );
