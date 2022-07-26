@@ -1,5 +1,5 @@
 {
-  "name": "uncharts-example",
+  "name": "@tecuity/uncharts-example",
   "homepage": "https://tecuity.github.io/uncharts",
   "version": "0.0.0",
   "license": "MIT",
@@ -7,7 +7,7 @@
   "dependencies": {
     "normalize.css": "^8.0.1",
     "prop-types": "^15.6.2",
-    "uncharts": "file:..",
+    "@tecuity/uncharts": "file:..",
     "react-scripts": "^1.1.4"
   },
   "scripts": {

@@ -9,7 +9,7 @@ import {
   ThemeProvider,
   ResponsiveProvider,
   useResponsive
-} from "uncharts";
+} from "@tecuity/uncharts";
 import GDPData from "./data";
 import { requestInterval, clearRequestInterval } from "./animationTimeout";
 

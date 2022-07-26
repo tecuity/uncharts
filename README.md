@@ -1,4 +1,4 @@
-# uncharts [![NPM](https://img.shields.io/npm/v/uncharts.svg)](https://www.npmjs.com/package/uncharts) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+# @tecuity/uncharts [![NPM](https://img.shields.io/npm/v/uncharts.svg)](https://www.npmjs.com/package/uncharts) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Demo page
 
@@ -7,7 +7,7 @@
 ## Install
 
 ```bash
-npm install --save uncharts
+npm install --save @tecuity/uncharts
 ```
 
 ## Usage
@@ -15,7 +15,7 @@ npm install --save uncharts
 ```jsx
 import React from 'react'
 
-import { Tile, LineGraph, BarGraph, PieChart, NumberTile, ThemeProvider} from 'uncharts'
+import { Tile, LineGraph, BarGraph, PieChart, NumberTile, ThemeProvider} from '@tecuity/uncharts'
 
 function App(){
   return (
