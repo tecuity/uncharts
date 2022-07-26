@@ -11,7 +11,7 @@ import {
   useResponsive
 } from "uncharts";
 import GDPData from "./data";
-import { requestInterval, clearRequestInterval } from './animationTimeout'
+import { requestInterval, clearRequestInterval } from "./animationTimeout";
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -154,7 +154,7 @@ const RandomPieChart = () => {
 
   React.useEffect(() => {
     const tileWidth = tile.current.getBoundingClientRect().width;
-    const newWidth = tileWidth - 40
+    const newWidth = tileWidth - 40;
     const newHeight = getHeightByWidth(tileWidth);
     setWidth(newWidth);
     setHeight(newHeight);
@@ -193,7 +193,7 @@ const RandomLineGraph = () => {
 
   React.useEffect(() => {
     const tileWidth = tile.current.getBoundingClientRect().width;
-    const newWidth = tileWidth - 40
+    const newWidth = tileWidth - 40;
     const newHeight = getHeightByWidth(tileWidth);
     setWidth(newWidth);
     setHeight(newHeight);
@@ -214,19 +214,21 @@ const RandomLineGraph = () => {
 
 const RandomBarGraph = () => {
   const getRandomData = () =>
-    GDPData.slice(0, 7).map(g => ({
+    GDPData.slice(0, 7).reverse().map(g => ({
       x: parseInt(g.date, 10),
       y: (parseInt(g.value, 10) / 1000000000000) * getRandom(0.95, 1.05)
     }));
   const [data, setData] = React.useState(getRandomData());
   const [width, setWidth] = React.useState(600);
   const [height, setHeight] = React.useState(450);
+  const [fromZero, setFromZero] = React.useState(false);
   const { page } = useResponsive();
   const tile = React.useRef();
 
   React.useEffect(() => {
     const interval = requestInterval(() => {
       setData(getRandomData());
+      setFromZero((prev) => !prev);
     }, 3000);
     return () => {
       clearRequestInterval(interval);
@@ -235,7 +237,7 @@ const RandomBarGraph = () => {
 
   React.useEffect(() => {
     const tileWidth = tile.current.getBoundingClientRect().width;
-    const newWidth = tileWidth - 40
+    const newWidth = tileWidth - 40;
     const newHeight = getHeightByWidth(tileWidth);
     setWidth(newWidth);
     setHeight(newHeight);
@@ -243,7 +245,14 @@ const RandomBarGraph = () => {
 
   return (
     <Tile ref={tile}>
-      <BarGraph data={data} yLabel="GDP in Millions" xLabel="Years" width={width} height={height} />
+      <BarGraph
+        data={data}
+        yLabel="GDP in Millions"
+        xLabel="Years"
+        width={width}
+        height={height}
+        yFromZero={fromZero}
+      />
     </Tile>
   );
 };
