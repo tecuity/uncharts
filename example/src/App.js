@@ -44,7 +44,10 @@ export default class App extends Component {
                     intervals={[
                       {
                         label: "Week",
-                        value: 24
+                        value: 30,
+                        onClick: () => {
+                          console.log("example on click function - clicked!");
+                        }
                       },
                       {
                         label: "Month",
@@ -55,6 +58,7 @@ export default class App extends Component {
                         value: 22941
                       }
                     ]}
+                    customStyles = {{"transform": "scale(1.1)"}}
                   />
                 </div>
                 <div className="column-spacer">
@@ -225,15 +229,15 @@ const RandomBarGraph = () => {
   const { page } = useResponsive();
   const tile = React.useRef();
 
-  React.useEffect(() => {
-    const interval = requestInterval(() => {
-      setData(getRandomData());
-      setFromZero((prev) => !prev);
-    }, 3000);
-    return () => {
-      clearRequestInterval(interval);
-    };
-  }, []);
+  // React.useEffect(() => {
+  //   const interval = requestInterval(() => {
+  //     setData(getRandomData());
+  //     setFromZero((prev) => !prev);
+  //   }, 3000);
+  //   return () => {
+  //     clearRequestInterval(interval);
+  //   };
+  // }, []);
 
   React.useEffect(() => {
     const tileWidth = tile.current.getBoundingClientRect().width;
@@ -252,6 +256,7 @@ const RandomBarGraph = () => {
         width={width}
         height={height}
         yFromZero={fromZero}
+        title="GDP / Year"
       />
     </Tile>
   );
