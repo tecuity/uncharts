@@ -9,13 +9,21 @@ export default ({
   label,
   intervals: initalIntervals = [],
   color = "blue",
-  prefix = ""
+  prefix = "",
+  customStyles,
 }) => {
   const theme = React.useContext(ThemeContext);
   const [intervals, setIntervals] = React.useState(null);
   const [selectedInterval, setSelectedInterval] = React.useState(null);
 
-  const getMappedIntervals = ents => ents.map(e => ({ ...e, id: nanoid(10) }));
+  const getMappedIntervals = ents => ents.map(e => {
+    if (e.id) {
+      return e;
+    }
+    else return { ...e, id: nanoid(10) };
+  });
+  // const getMappedIntervals = ents => ents.map(e => ({ ...e }));
+
 
   React.useEffect(() => {
     const newIntervals = getMappedIntervals(initalIntervals);
@@ -29,7 +37,7 @@ export default ({
     : 0;
 
   return (
-    <Tile noPadding hideOverflow>
+    <Tile noPadding hideOverflow customStyles={customStyles}>
       <div className={styles.wrapper}>
         <div className={styles.leftColumn}>
           <label className={styles.label}>{label}</label>
@@ -45,7 +53,12 @@ export default ({
                       }}
                       data-interval-selected={isSelected}
                       key={int.id}
-                      onClick={() => setSelectedInterval(int.id)}
+                      onClick={() => {
+                        console.log("int", int)
+                        setSelectedInterval(int.id);
+                        console.log("int.onClick", int.onClick);
+                        int.onClick && int.onClick();
+                      }}
                     >
                       {int.label}
                     </button>
@@ -73,7 +86,7 @@ export default ({
                   {prefix ? (
                     <span className={styles.prefix}>{prefix}</span>
                   ) : null}
-                  {number.toFixed(0)}
+                  {typeof number === 'number' ? number.toFixed(0) : ''}
                 </span>
               )}
             </Transition>
