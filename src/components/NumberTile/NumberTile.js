@@ -5,7 +5,7 @@ import Transition from "react-prop-transition";
 import { ThemeContext } from "../ThemeProvider/ThemeProvider";
 const nanoid = require("nanoid");
 
-export default ({
+export const NumberTile = ({
   label,
   intervals: initalIntervals = [],
   color = "blue",

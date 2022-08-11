@@ -2,7 +2,7 @@ import React from "react";
 import { ThemeContext } from "../ThemeProvider/ThemeProvider";
 import * as d3 from "d3";
 
-export default ({ data, width = 600, height = 450 }) => {
+export const PieChart = ({ data, width = 600, height = 450 }) => {
   const stageRef = React.useRef();
   const theme = React.useContext(ThemeContext);
   const chartRef = React.useRef({});

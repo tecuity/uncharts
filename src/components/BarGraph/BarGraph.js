@@ -3,7 +3,7 @@ import React from "react";
 import * as d3 from "d3";
 import usePrevious from "../../hooks/usePrevious";
 
-export default ({
+export const BarGraph = ({
   data,
   xLabel,
   yLabel,
