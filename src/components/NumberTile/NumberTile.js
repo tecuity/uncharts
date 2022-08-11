@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./NumberTile.css";
-import Tile from "../Tile/Tile";
+import { Tile } from "../Tile/Tile";
 import Transition from "react-prop-transition";
 import { ThemeContext } from "../ThemeProvider/ThemeProvider";
 const nanoid = require("nanoid");
