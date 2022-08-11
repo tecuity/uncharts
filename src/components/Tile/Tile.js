@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./Tile.css";
 
-export default React.forwardRef(
+export const Tile = React.forwardRef(
   ({ children, noPadding, hideOverflow, customStyles }, ref) => {
     return (
       <div

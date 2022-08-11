@@ -1,7 +1,7 @@
 import React from "react";
 import * as d3 from "d3";
 
-const LineGraph = ({ data, xLabel, yLabel, width = 600, height = 450 }) => {
+export const LineGraph = ({ data, xLabel, yLabel, width = 600, height = 450 }) => {
   const stageRef = React.useRef();
   const chartRef = React.useRef({});
 
@@ -150,5 +150,3 @@ const LineGraph = ({ data, xLabel, yLabel, width = 600, height = 450 }) => {
     </svg>
   );
 };
-
-export default LineGraph;
