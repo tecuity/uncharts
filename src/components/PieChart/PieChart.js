@@ -164,7 +164,7 @@ export const PieChart = ({ data, width = 600, height = 450 }) => {
         .style("font-size", `${9 + Math.floor(1 * (width / 60))}px`)
         .attr("y", width / 100)
         .attr("transform", d => `translate(${arc.centroid(d)})`)
-        .text((d, i) => `${Math.round((data[i].value / total) * 100)}%`);
+        .text((d, i) => data[i].value ? `${Math.round((data[i].value / total) * 100)}%` : '');
     }
 
     if (!chart.legend) {
