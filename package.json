@@ -1,6 +1,6 @@
 {
   "name": "@tecuity/uncharts",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Opinionated data charts for React, powered by D3",
   "author": "chrisjpatty",
   "license": "MIT",
