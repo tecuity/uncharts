@@ -20,10 +20,14 @@ export const BarGraph = ({
   const prevDataLength = usePrevious(data.length);
 
   const getYExtent = dt => {
-    const yExtent = d3.extent(dt, d => d.y);
-    if (yExtent[0] !== 0) {
-      yExtent[0] = yExtent[0] - (yExtent[1] - yExtent[0]) / 15;
+    const yExtent = d3.extent(dt, d => d.y); // yExtent = [min, max] (range to display, calculated from actual data range, but can be set manually)
+    // if (yExtent[0] !== 0) {
+    //   yExtent[0] = yExtent[0] - (yExtent[1] - yExtent[0]) / 15;
+    // }
+    if (yExtent[1] <= 10) {
+      yExtent[0] = 0;
     }
+    console.log(yExtent);
     return yExtent;
   };
 
@@ -73,7 +77,7 @@ export const BarGraph = ({
       chart.yScale = d3
         .scaleLinear()
         .domain(yExtent)
-        .range([calculatedHeight, margin]);
+        .range([calculatedHeight, margin])
     } else {
       chart.yScale.domain(yExtent).range([calculatedHeight, margin]);
     }
@@ -107,9 +111,9 @@ export const BarGraph = ({
         .append("g")
         .attr("class", "y axis")
         .attr("transform", `translate(${margin * 3},0)`)
-        .call(d3.axisLeft(chart.yScale));
+        .call(d3.axisLeft(chart.yScale).ticks(Math.min(yExtent[1], 10)))
     } else {
-      chart.yAxis.transition().call(d3.axisLeft(chart.yScale));
+      chart.yAxis.transition().call(d3.axisLeft(chart.yScale).ticks(Math.min(yExtent[1], 10)));
     }
 
     if (!chart.xLabel) {
