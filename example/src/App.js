@@ -217,20 +217,20 @@ const RandomLineGraph = () => {
 };
 
 const RandomBarGraph = () => {
-  // const getRandomData = () =>
-  //   GDPData.slice(0, 7).reverse().map(g => ({
-  //     x: parseInt(g.date, 10),
-  //     y: (parseInt(g.value, 10) / 1000000000000) * getRandom(0.95, 1.05)
-  //   }));
+  const getRandomData = () =>
+    GDPData.slice(0, 7).reverse().map(g => ({
+      x: parseInt(g.date, 10),
+      y: (parseInt(g.value, 10) / 1000000000000) * getRandom(0.95, 1.05)
+    }));
 
   
-  // const [data, setData] = useState(getRandomData);
-  const data = [
-    {x: 1, y: 1},
-    {x: 2, y: 2},
-    {x: 3, y: 1},
-    {x: 4, y: 1},
-  ]
+  const [data, setData] = useState(getRandomData);
+  // const data = [
+  //   {x: 1, y: 5},
+  //   {x: 2, y: 11},
+  //   {x: 3, y: 4},
+  //   {x: 4, y: 1},
+  // ]
   const [width, setWidth] = useState(600);
   const [height, setHeight] = useState(450);
   const [fromZero, setFromZero] = useState(false);
@@ -263,7 +263,7 @@ const RandomBarGraph = () => {
         xLabel="Years"
         width={width}
         height={height}
-        yFromZero={fromZero}
+        // yFromZero={true}
         title="GDP / Year"
       />
     </Tile>
