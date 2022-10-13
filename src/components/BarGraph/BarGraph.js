@@ -2,6 +2,7 @@ import React from "react";
 // import { ThemeContext } from '../ThemeProvider/ThemeProvider'
 import * as d3 from "d3";
 import usePrevious from "../../hooks/usePrevious";
+import { min } from "d3";
 
 export const BarGraph = ({
   data,
@@ -11,7 +12,8 @@ export const BarGraph = ({
   height,
   yFromZero,
   title = "",
-  barOffset = 15
+  barOffset = 15,
+  minRange
 }) => {
   const stageRef = React.useRef();
   // const theme = React.useContext(ThemeContext);
@@ -23,6 +25,12 @@ export const BarGraph = ({
     const yExtent = d3.extent(dt, d => d.y); // yExtent = [min, max] (range to display, calculated from actual data range, but can be set manually)
     if (yExtent[0] !== 0) {
       yExtent[0] = yExtent[0] - (yExtent[1] - yExtent[0]) / 15;
+    }
+    if (minRange && yExtent[1] < minRange) {
+      yExtent[1] = minRange;
+    }
+    if (yFromZero) {
+      yExtent[0] = "0";
     }
     // if (yExtent[1] <= 10) {
     //   yExtent[0] = 0;
@@ -59,10 +67,6 @@ export const BarGraph = ({
     const yExtent = getYExtent(data);
 
     console.table({width, height, margin, calculatedWidth, calculatedHeight, displayWidth, barWidth, offSet})
-
-    if (yFromZero) {
-      yExtent[0] = "0";
-    }
 
     if (!chart.xScale) {
       chart.xScale = d3
