@@ -120,8 +120,8 @@ export const PieChart = ({ data, width = 600, height = 450 }) => {
 
       chart.slices
         .transition()
-        .duration(2000)
-        .ease(d3.easeElastic.period(0.4))
+        .duration(700)
+        .ease(d3.easeCubicInOut)
         .attrTween("d", arcTween);
 
       chart.slices.on("mouseover", d => {
@@ -137,8 +137,8 @@ export const PieChart = ({ data, width = 600, height = 450 }) => {
       chart.slices
         .data(chart.pie)
         .transition()
-        .duration(2000)
-        .ease(d3.easeElastic.period(0.4))
+        .duration(700)
+        .ease(d3.easeCubicInOut)
         .attrTween("d", arcTween);
     }
 
@@ -159,8 +159,8 @@ export const PieChart = ({ data, width = 600, height = 450 }) => {
       chart.sliceLabels
         .data(chart.pie)
         .transition()
-        .duration(2000)
-        .ease(d3.easeElastic.period(0.4))
+        .duration(700)
+        .ease(d3.easeCubicInOut)
         .style("font-size", `${9 + Math.floor(1 * (width / 60))}px`)
         .attr("y", width / 100)
         .attr("transform", d => `translate(${arc.centroid(d)})`)
