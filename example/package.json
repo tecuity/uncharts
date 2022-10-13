@@ -8,7 +8,7 @@
     "normalize.css": "^8.0.1",
     "prop-types": "^15.6.2",
     "@tecuity/uncharts": "file:..",
-    "react-scripts": "^1.1.4"
+    "react-scripts": "^5.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
