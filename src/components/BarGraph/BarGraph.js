@@ -192,8 +192,7 @@ export const BarGraph = ({
         .style("font-weight", "800")
         .style("text-anchor", "middle")
         .style("text-transform", "uppercase")
-        .style("transition", "opacity 300ms")
-        .attr("id", "hoverLabel");
+        .style("transition", "opacity 300ms");
     } else {
       chart.hoverLabel.attr("transform", `translate(${width / 2}, ${height})`);
     }
@@ -226,6 +225,7 @@ export const BarGraph = ({
       });
 
       chart.bars.on("mouseout", d => {
+        chart.hoverLabel.attr("id", undefined);
         chart.hoverLabel.style("opacity", 0);
       });
     };
