@@ -55,18 +55,27 @@ export const BarGraph = ({
     const chart = chartRef.current;
     if (!chart.svg) {
       chart.svg = d3.select(stageRef.current);
-      chart.svg.attr('overflow', 'visible')
+      chart.svg.attr("overflow", "visible");
     }
     // const stage = stageRef.current.getBoundingClientRect()
     const margin = 15;
     const calculatedWidth = width - margin * 2;
     const calculatedHeight = height - margin * 2;
     const displayWidth = calculatedWidth - margin * 2;
-    const barWidth = (displayWidth / data.length) * 0.85
+    const barWidth = (displayWidth / data.length) * 0.85;
     const offSet = (displayWidth / data.length) * 0.15;
     const yExtent = getYExtent(data);
 
-    console.table({width, height, margin, calculatedWidth, calculatedHeight, displayWidth, barWidth, offSet})
+    console.table({
+      width,
+      height,
+      margin,
+      calculatedWidth,
+      calculatedHeight,
+      displayWidth,
+      barWidth,
+      offSet
+    });
 
     if (!chart.xScale) {
       chart.xScale = d3
@@ -83,7 +92,7 @@ export const BarGraph = ({
       chart.yScale = d3
         .scaleLinear()
         .domain(yExtent)
-        .range([calculatedHeight, margin])
+        .range([calculatedHeight, margin]);
     } else {
       chart.yScale.domain(yExtent).range([calculatedHeight, margin]);
     }
@@ -117,9 +126,11 @@ export const BarGraph = ({
         .append("g")
         .attr("class", "y axis")
         .attr("transform", `translate(${margin * 3},0)`)
-        .call(d3.axisLeft(chart.yScale).ticks(Math.min(yExtent[1], 10)))
+        .call(d3.axisLeft(chart.yScale).ticks(Math.min(yExtent[1], 10)));
     } else {
-      chart.yAxis.transition().call(d3.axisLeft(chart.yScale).ticks(Math.min(yExtent[1], 10)));
+      chart.yAxis
+        .transition()
+        .call(d3.axisLeft(chart.yScale).ticks(Math.min(yExtent[1], 10)));
     }
 
     if (!chart.xLabel) {
@@ -129,11 +140,17 @@ export const BarGraph = ({
         .style("font-weight", "800")
         .style("text-anchor", "middle")
         .style("text-transform", "uppercase")
-        .attr("transform", `translate(${width / 2}, ${calculatedHeight + margin * 2})`)
+        .attr(
+          "transform",
+          `translate(${width / 2}, ${calculatedHeight + margin * 2})`
+        )
         .text(xLabel);
     } else {
       chart.xLabel
-        .attr("transform", `translate(${width / 2}, ${calculatedHeight + margin * 2})`)
+        .attr(
+          "transform",
+          `translate(${width / 2}, ${calculatedHeight + margin * 2})`
+        )
         .text(xLabel);
     }
 
@@ -165,9 +182,7 @@ export const BarGraph = ({
         .attr("transform", `translate(${width / 2}, 5)`)
         .text(title);
     } else {
-      chart.title
-        .attr("transform", `translate(${width / 2}, 5)`)
-        .text(title);
+      chart.title.attr("transform", `translate(${width / 2}, 5)`).text(title);
     }
 
     if (!chart.hoverLabel) {
@@ -178,11 +193,9 @@ export const BarGraph = ({
         .style("text-anchor", "middle")
         .style("text-transform", "uppercase")
         .style("transition", "opacity 300ms")
-
+        .attr("id", "hoverLabel");
     } else {
-      chart.hoverLabel
-        .attr("transform", `translate(${width / 2}, ${height})`)
-
+      chart.hoverLabel.attr("transform", `translate(${width / 2}, ${height})`);
     }
 
     const createBars = () => {
@@ -195,19 +208,26 @@ export const BarGraph = ({
         .attr("width", barWidth)
         .attr("height", d => 0)
         // .attr("height", d => calculatedHeight - chart.yScale(d))
-        .attr("x", (d, i) => margin + chart.xScale(data[i].x) + (offSet/2))
+        .attr("x", (d, i) => margin + chart.xScale(data[i].x) + offSet / 2)
         // .attr("y", d => calculatedHeight - margin)
         .attr("y", d => calculatedHeight)
-        .attr("rx", 5)
+        .attr("rx", 5);
 
       chart.bars.on("mouseover", (d, i) => {
-        chart.hoverLabel.attr("transform", `translate(${margin + chart.xScale(data[i].x) + (offSet/2) + (barWidth / 2)}, ${calculatedHeight + (margin * 3)})`)
+        chart.hoverLabel.attr(
+          "transform",
+          `translate(${margin +
+            chart.xScale(data[i].x) +
+            offSet / 2 +
+            barWidth / 2}, ${calculatedHeight + margin * 3})`
+        );
+        chart.hoverLabel.attr("id", "hoverLabel");
         chart.hoverLabel.text(d).style("opacity", 1);
-      })
+      });
 
       chart.bars.on("mouseout", d => {
         chart.hoverLabel.style("opacity", 0);
-      })
+      });
     };
 
     const animateBars = () => {
@@ -220,14 +240,21 @@ export const BarGraph = ({
         .delay((d, i) => i * 12)
         .attr("width", barWidth)
         .attr("height", d => calculatedHeight - chart.yScale(d))
-        .attr("x", (d, i) => margin + chart.xScale(data[i].x) + (offSet/2))
+        .attr("x", (d, i) => margin + chart.xScale(data[i].x) + offSet / 2)
         // .attr('y', d => calculatedHeight - chart.yScale(d) - margin)
         .attr("y", d => chart.yScale(d));
 
-        chart.bars.on("mouseover", (d, i) => {
-          chart.hoverLabel.attr("transform", `translate(${margin + chart.xScale(data[i].x) + (offSet/2) + (barWidth / 2)}, ${calculatedHeight + (margin * 3)})`)
-          chart.hoverLabel.text(d).style("opacity", 1);
-        })
+      chart.bars.on("mouseover", (d, i) => {
+        chart.hoverLabel.attr(
+          "transform",
+          `translate(${margin +
+            chart.xScale(data[i].x) +
+            offSet / 2 +
+            barWidth / 2}, ${calculatedHeight + margin * 3})`
+        );
+        chart.hoverLabel.attr("id", "hoverLabel");
+        chart.hoverLabel.text(d).style("opacity", 1);
+      });
     };
 
     if (!chart.bars) {
